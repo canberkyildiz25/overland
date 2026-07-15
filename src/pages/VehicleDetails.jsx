@@ -14,6 +14,12 @@ const AMENITY_LABELS = {
   water: 'Water',
 }
 
+const FORM_LABELS = {
+  van: 'Camper Van',
+  fullyIntegrated: 'Fully Integrated',
+  alcove: 'Alcove',
+}
+
 function getAmenityTags(vehicle) {
   return Object.keys(AMENITY_LABELS).filter((key) => vehicle[key])
 }
@@ -50,7 +56,7 @@ export default function VehicleDetails() {
   if (loading) {
     return (
       <section className="details-page">
-        <p className="status-msg">Yükleniyor...</p>
+        <p className="status-msg">Loading…</p>
       </section>
     )
   }
@@ -59,9 +65,9 @@ export default function VehicleDetails() {
     return (
       <section className="details-page">
         <div className="details-header">
-          <h2>Aradığınız araç bulunamadı.</h2>
+          <h2>We couldn’t find that rig.</h2>
           <Link className="back-link" to="/catalog">
-            Kataloğa Dön
+            Back to the fleet
           </Link>
         </div>
       </section>
@@ -70,7 +76,7 @@ export default function VehicleDetails() {
 
   const tags = getAmenityTags(vehicle)
   const details = [
-    { label: 'Form', value: vehicle.form },
+    { label: 'Form', value: FORM_LABELS[vehicle.form] || vehicle.form },
     { label: 'Length', value: vehicle.length },
     { label: 'Width', value: vehicle.width },
     { label: 'Height', value: vehicle.height },
@@ -87,10 +93,10 @@ export default function VehicleDetails() {
           <h2>{vehicle.name}</h2>
           <p className="details-meta">
             <span className="star-icon">★</span>
-            {vehicle.rating}({vehicle.reviews?.length ?? 0} Reviews) · 📍 {vehicle.location}
+            {vehicle.rating} ({vehicle.reviews?.length ?? 0} reviews) · {vehicle.location}
           </p>
         </div>
-        <span className="details-price">€{Number(vehicle.price).toFixed(2)}</span>
+        <span className="details-price">${vehicle.price}<i>/night</i></span>
       </div>
 
       <div className="details-gallery">
@@ -148,7 +154,7 @@ export default function VehicleDetails() {
 
             {submitted && (
               <div className="booking-success">
-                Rezervasyonunuz alındı! En kısa sürede sizinle iletişime geçeceğiz.
+                Request received! Our team will be in touch within 24 hours.
               </div>
             )}
 
@@ -185,7 +191,7 @@ export default function VehicleDetails() {
       ) : (
         <div className="reviews-panel">
           {!vehicle.reviews?.length ? (
-            <p className="details-description">Henüz değerlendirme yok.</p>
+            <p className="details-description">No reviews yet.</p>
           ) : (
             vehicle.reviews.map((review, i) => (
               <div key={i} className="review-card">

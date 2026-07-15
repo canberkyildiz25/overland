@@ -61,7 +61,7 @@ export default function Catalog() {
           <input
             className="filter-input"
             type="text"
-            placeholder="Kyiv, Ukraine"
+            placeholder="Try ‘Utah’ or ‘Oregon’"
             value={localFilters.location}
             onChange={(e) =>
               setLocalFilters((prev) => ({ ...prev, location: e.target.value }))
@@ -106,11 +106,11 @@ export default function Catalog() {
       </aside>
 
       <div className="catalog-list">
-        {loading && <p className="status-msg">Yükleniyor...</p>}
-        {error && <p className="status-msg error">Hata: {error}</p>}
+        {loading && <p className="status-msg">Loading the fleet…</p>}
+        {error && <p className="status-msg error">Something went wrong: {error}</p>}
 
         {!loading && !error && visible.length === 0 && (
-          <p className="status-msg">Sonuç bulunamadı.</p>
+          <p className="status-msg">No rigs match your filters. Try widening your search.</p>
         )}
 
         {!loading &&
@@ -135,15 +135,15 @@ export default function Catalog() {
                       <h3>{vehicle.name}</h3>
                       <p className="vehicle-meta">
                       <span className="star-icon">★</span>
-                      {vehicle.rating}({reviewCount} Reviews) · 📍 {vehicle.location}
+                      {vehicle.rating} ({reviewCount} reviews) · {vehicle.location}
                     </p>
                     </div>
                     <div className="vehicle-price">
-                      <span>€{Number(vehicle.price).toFixed(2)}</span>
+                      <span>${vehicle.price}<i>/night</i></span>
                       <button
                         className={`fav-btn${isFav ? ' active' : ''}`}
                         onClick={() => dispatch(toggleFavorite(vehicle.id))}
-                        aria-label={isFav ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+                        aria-label={isFav ? 'Remove from favourites' : 'Add to favourites'}
                       >
                         {isFav ? '♥' : '♡'}
                       </button>
